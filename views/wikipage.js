@@ -3,6 +3,7 @@ const layout = require("./layout");
 const marked = require('marked');
 
 module.exports = (page, author) => layout(html`
+  <h5> ${page.tags} </h5>
   <h4>by <a href="/users/${author.id}">${author.name}</a></h4>
   <hr/>
   <div class="page-body">$${marked(page.content)}</div>

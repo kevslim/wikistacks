@@ -22,9 +22,12 @@ router.post("/", async (req, res, next) => {
         email: req.body.email
       }
     });
+    // let { tags } = req.body;
+    // tags = tags.split(" ");
+    // req.body.tags = tags;
 
     const page = await Page.create(req.body);
-
+    console.log("req body", req.body);
     page.setAuthor(user);
 
     res.redirect("/wiki/" + page.slug);

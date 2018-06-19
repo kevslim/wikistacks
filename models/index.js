@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 
 const db = new Sequelize("postgres://localhost:5432/wikistack", {
-  logging: false
+  logging: false,
 });
 
 const Page = db.define("page", {
@@ -21,6 +21,13 @@ const Page = db.define("page", {
   },
   status: {
     type: Sequelize.ENUM("open", "closed")
+  },
+  tags: {
+    type: Sequelize.ARRAY(Sequelize.TEXT),
+    allowNull:false,
+    set: function(tags) {
+      this.setDataValue('tags', tags.split(" "))
+    }
   }
 });
 
@@ -31,7 +38,10 @@ Page.beforeValidate(page => {
   if (!page.slug) {
     page.slug = page.title.replace(/\s/g, "_").replace(/\W/g, "").toLowerCase();
   }
+// console.log((page.tags).split(" "));
+  // page.tags = (page.tags).split(" ");
 });
+
 
 const User = db.define("user", {
   name: {
