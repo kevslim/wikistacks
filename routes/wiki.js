@@ -4,6 +4,7 @@ const models = require("../models");
 const Page = models.Page;
 const User = models.User;
 const { main, addPage, editPage, wikiPage } = require("../views");
+const lookup = require("../views/lookup");
 
 // /wiki
 router.get("/", async (req, res, next) => {
@@ -64,6 +65,27 @@ router.get("/add", (req, res) => {
   res.send(addPage());
 });
 
+// // /wiki/lookup
+// router.get("/lookup", (req, res) => {
+//   res.send(lookup());
+// });
+
+// /wiki/lookup
+router.get("/lookup/:tag", async (req, res, next) => {
+  try {
+    const page = await Page.findByTag( {
+      where: {
+        tag : req.params.tag
+      }
+    })
+    res.send(lookup());
+
+  } catch(error) {
+    next(error);
+  }
+});
+
+
 // /wiki/(dynamic value)
 router.get("/:slug", async (req, res, next) => {
   try {
@@ -97,5 +119,6 @@ router.get("/:slug/edit", async (req, res, next) => {
     }
   } catch (error) { next(error) }
 });
+
 
 module.exports = router;
